@@ -1,0 +1,43 @@
+<h1 mat-dialog-title>{{ title }}</h1>
+<div mat-dialog-content>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Nome</mat-label>
+    <input matInput [(ngModel)]="pokemon.name">
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Habilidades</mat-label>
+    <mat-chip-list #chipList>
+      <mat-chip 
+        *ngFor="let skill of pokemon.skills"
+        [removable]="true" 
+        (removed)="removeSkill(skill)">
+        {{skill}}
+        <button matChipRemove>
+          <mat-icon>cancel</mat-icon>
+        </button>
+      </mat-chip>
+      <input placeholder="Nova habilidade"
+        [matChipInputFor]="chipList"
+        [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+        [matChipInputAddOnBlur]="true"
+        (matChipInputTokenEnd)="addSkill($event)">
+    </mat-chip-list>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Tipo</mat-label>
+    <input type="text" matInput [matAutocomplete]="auto" [(ngModel)]="pokemon.type">
+    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayAutocomplete">
+      <mat-option *ngFor="let type of pokemonTypes | async" [value]="type.name">
+        {{ type.name }}
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+
+</div>
+<div mat-dialog-actions>
+  <button mat-button color="primary" (click)="onCancel()">Cancelar</button>
+  <button mat-raised-button color="primary" [mat-dialog-close]="data" cdkFocusInitial>{{ action }}</button>
+</div>
